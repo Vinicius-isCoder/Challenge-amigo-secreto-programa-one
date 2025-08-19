@@ -1,20 +1,30 @@
 let listaDeAmigos = [];
+let listaDeMensagem = document.getElementById('mensagens');
+let resultado = document.getElementById('resultado');
+let campoInput = document.getElementById('amigo');
+let botaoAdicionar = document.getElementById('adicao');
+
+function keyAdicionarAmigo(event) {
+    if (event.key === 'Enter') {
+        adicionarAmigo();
+    }
+}
 
 function adicionarAmigo() {
-    let input = document.querySelector('input');
-    let nomeAmigo = input.value.trim();
+    let nomeAmigo = campoInput.value.trim();
 
     if (listaDeAmigos.includes(nomeAmigo)) {
-        alert('Nome já presente na lista');
+        listaDeMensagem.innerHTML = 'Nome já presente na lista';
     } else {
         if (nomeAmigo != '' &&  !/[0-9]/.test(nomeAmigo)) {
             listaDeAmigos.push(nomeAmigo);
             console.log(listaDeAmigos);
             atualizarLista();
-            input.value = '';
+            campoInput.value = '';
+            listaDeMensagem.innerHTML = '';
         } else {
-            alert('Digite um nome válido');
-            input.value = '';
+            listaDeMensagem.innerHTML = 'Digite um nome válido';
+            campoInput.value = '';
         }
     }
 }
@@ -35,10 +45,23 @@ function sortearAmigo() {
     if (listaDeAmigos.length > 0) {
         let indiceAleatorio = Math.floor(Math.random() * listaDeAmigos.length);
         let ganhador = listaDeAmigos[indiceAleatorio];
-        let mensagem = `O amigo secreto sorteado é: ${ganhador}`;
-        let resultado = document.getElementById('resultado');
-        resultado.innerHTML = mensagem;
+        let mensagemGanhador = `O amigo secreto sorteado é: ${ganhador}`;
+        resultado.innerHTML = mensagemGanhador;
+        campoInput.disabled = true;
+        botaoAdicionar.disabled = true;
     } else {
-        alert('Não há nenhum nome para ser sorteado');
+        listaDeMensagem.innerHTML = 'Não há nomes para o sorteio';
+    }
+}
+
+function limparLista() {
+    if (listaDeAmigos.length > 0) {
+        listaDeAmigos = [];
+        atualizarLista();
+        campoInput.disabled = false;
+        botaoAdicionar.disabled = false;
+        resultado.innerHTML = '';
+    } else {
+        listaDeMensagem.innerHTML = 'A lista já está vazia.';
     }
 }
